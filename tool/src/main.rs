@@ -266,6 +266,13 @@ unsafe fn fan_set(ec: &mut Ec<Box<dyn Access>>, index: u8, duty: u8) -> Result<(
     ec.fan_set(index, duty)
 }
 
+unsafe fn fan_tach(ec: &mut Ec<Box<dyn Access>>, index: u8) -> Result<(), Error> {
+    let tach = ec.fan_tach(index)?;
+    println!("{}", tach);
+
+    Ok(())
+}
+
 unsafe fn keymap_get(ec: &mut Ec<Box<dyn Access>>, layer: u8, output: u8, input: u8) -> Result<(), Error> {
     let value = ec.keymap_get(layer, output, input)?;
     println!("{:04X}", value);
@@ -316,6 +323,12 @@ fn main() {
             )
             .arg(Arg::with_name("duty")
                 .value_parser(clap::value_parser!(u8))
+            )
+        )
+        .subcommand(SubCommand::with_name("fan_tach")
+            .arg(Arg::with_name("index")
+                .value_parser(clap::value_parser!(u8))
+                .required(true)
             )
         )
         .subcommand(SubCommand::with_name("flash")
@@ -412,6 +425,7 @@ fn main() {
                     for info in api.device_list() {
                         #[allow(clippy::single_match)]
                         match (info.vendor_id(), info.product_id(), info.interface_number()) {
+                            /*
                             // System76 launch_1
                             (0x3384, 0x0001, 1) |
                             // System76 launch_lite_1
@@ -420,6 +434,8 @@ fn main() {
                             (0x3384, 0x0006, 1) |
                             // System76 launch_heavy_1
                             (0x3384, 0x0007, 1) => {
+                            */
+                            (0x3384, 0x000B, 1) => {
                                 let device = info.open_device(&api)?;
                                 let access = AccessHid::new(device, 10, 100)?;
                                 return Ok(Ec::new(access)?.into_dyn());
@@ -450,22 +466,32 @@ fn main() {
             },
         },
         Some(("fan", sub_m)) => {
-            let index = sub_m.value_of("index").unwrap().parse::<u8>().unwrap();
-            let duty_opt = sub_m.value_of("duty").map(|x| x.parse::<u8>().unwrap());
+            let index = sub_m.get_one::<u8>("index").unwrap();
+            let duty_opt = sub_m.get_one::<u8>("duty");
             match duty_opt {
-                Some(duty) => match unsafe { fan_set(&mut ec, index, duty) } {
+                Some(duty) => match unsafe { fan_set(&mut ec, *index, *duty) } {
                     Ok(()) => (),
                     Err(err) => {
                         eprintln!("failed to set fan {} to {}: {:X?}", index, duty, err);
                         process::exit(1);
                     },
                 },
-                None => match unsafe { fan_get(&mut ec, index) } {
+                None => match unsafe { fan_get(&mut ec, *index) } {
                     Ok(()) => (),
                     Err(err) => {
                         eprintln!("failed to get fan {}: {:X?}", index, err);
                         process::exit(1);
                     },
+                },
+            }
+        },
+        Some(("fan_tach", sub_m)) => {
+            let index = sub_m.get_one::<u8>("index").unwrap();
+            match unsafe { fan_tach(&mut ec, *index) } {
+                Ok(()) => (),
+                Err(err) => {
+                    eprintln!("failed to get fan {} tachometer: {:X?}", index, err);
+                    process::exit(1);
                 },
             }
         },
@@ -497,12 +523,12 @@ fn main() {
             },
         },
         Some(("keymap", sub_m)) => {
-            let layer = sub_m.value_of("layer").unwrap().parse::<u8>().unwrap();
-            let output = sub_m.value_of("output").unwrap().parse::<u8>().unwrap();
-            let input = sub_m.value_of("input").unwrap().parse::<u8>().unwrap();
+            let layer = sub_m.get_one::<u8>("layer").unwrap();
+            let output = sub_m.get_one::<u8>("output").unwrap();
+            let input = sub_m.get_one::<u8>("input").unwrap();
             match sub_m.value_of("value") {
                 Some(value_str) => match u16::from_str_radix(value_str.trim_start_matches("0x"), 16) {
-                    Ok(value) => match unsafe { keymap_set(&mut ec, layer, output, input, value) } {
+                    Ok(value) => match unsafe { keymap_set(&mut ec, *layer, *output, *input, value) } {
                         Ok(()) => (),
                         Err(err) => {
                             eprintln!("failed to set keymap {}, {}, {} to {}: {:X?}", layer, output, input, value, err);
@@ -514,7 +540,7 @@ fn main() {
                         process::exit(1);
                     }
                 },
-                None => match unsafe { keymap_get(&mut ec, layer, output, input) } {
+                None => match unsafe { keymap_get(&mut ec, *layer, *output, *input) } {
                     Ok(()) => (),
                     Err(err) => {
                         eprintln!("failed to get keymap {}, {}, {}: {:X?}", layer, output, input, err);
@@ -524,11 +550,11 @@ fn main() {
             }
         },
         Some(("led_color", sub_m)) => {
-            let index = sub_m.value_of("index").unwrap().parse::<u8>().unwrap();
+            let index = sub_m.get_one::<u8>("index").unwrap();
             let value = sub_m.value_of("value");
             if let Some(value) = value {
                 let (r, g, b) = parse_color(value).unwrap();
-                match unsafe { ec.led_set_color(index, r, g, b) } {
+                match unsafe { ec.led_set_color(*index, r, g, b) } {
                     Ok(()) => (),
                     Err(err) => {
                         eprintln!("failed to set color {}: {:X?}", value, err);
@@ -536,7 +562,7 @@ fn main() {
                     },
                 }
             } else {
-                match unsafe { ec.led_get_color(index) } {
+                match unsafe { ec.led_get_color(*index) } {
                     Ok((r, g, b)) => println!("{:02x}{:02x}{:02x}", r, g, b),
                     Err(err) => {
                         eprintln!("failed to get color: {:X?}", err);
@@ -546,10 +572,10 @@ fn main() {
             }
         },
         Some(("led_value", sub_m)) => {
-            let index = sub_m.value_of("index").unwrap().parse::<u8>().unwrap();
-            let value = sub_m.value_of("value").map(|x| x.parse::<u8>().unwrap());
+            let index = sub_m.get_one::<u8>("index").unwrap();
+            let value = sub_m.get_one::<u8>("value");
             if let Some(value) = value {
-                match unsafe { ec.led_set_value(index, value) } {
+                match unsafe { ec.led_set_value(*index, *value) } {
                     Ok(()) => (),
                     Err(err) => {
                         eprintln!("failed to set value {}: {:X?}", value, err);
@@ -557,7 +583,7 @@ fn main() {
                     },
                 }
             } else {
-                match unsafe { ec.led_get_value(index) } {
+                match unsafe { ec.led_get_value(*index) } {
                     Ok((value, max)) => {
                         println!("value: {}", value);
                         println!("max: {}", max);
@@ -570,11 +596,11 @@ fn main() {
             }
         },
         Some(("led_mode", sub_m)) => {
-            let layer = sub_m.value_of("layer").unwrap().parse::<u8>().unwrap();
-            let mode = sub_m.value_of("mode").map(|x| x.parse::<u8>().unwrap());
-            let speed = sub_m.value_of("speed").map(|x| x.parse::<u8>().unwrap());
+            let layer = sub_m.get_one::<u8>("layer").unwrap();
+            let mode = sub_m.get_one::<u8>("mode");
+            let speed = sub_m.get_one::<u8>("speed");
             if let (Some(mode), Some(speed)) = (mode, speed) {
-                match unsafe { ec.led_set_mode(layer, mode, speed) } {
+                match unsafe { ec.led_set_mode(*layer, *mode, *speed) } {
                     Ok(()) => (),
                     Err(err) => {
                         eprintln!("failed to set layer {} mode {} at speed {}: {:X?}", layer, mode, speed, err);
@@ -582,7 +608,7 @@ fn main() {
                     },
                 }
             } else {
-                match unsafe { ec.led_get_mode(layer) } {
+                match unsafe { ec.led_get_mode(*layer) } {
                     Ok((mode, speed)) => {
                         println!("mode: {}", mode);
                         println!("speed: {}", speed);
