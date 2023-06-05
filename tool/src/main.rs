@@ -631,7 +631,7 @@ fn main() {
         Some(("reset", _sub_m)) => match unsafe { ec.reset() } {
             Ok(()) => (),
             Err(err) => {
-                eprintln!("failed to save LED settings: {:X?}", err);
+                eprintln!("failed to reset: {:X?}", err);
                 process::exit(1);
             },
         },
