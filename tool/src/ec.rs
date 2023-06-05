@@ -336,10 +336,10 @@ impl<A: Access> Ec<A> {
             0
         ];
         self.command(Cmd::FanTach, &mut data)?;
-        Ok((
+        Ok(
             (data[1] as u16) |
             ((data[2] as u16) << 8)
-        ))
+        )
     }
 
     pub fn into_dyn(self) -> Ec<Box<dyn Access>>
