@@ -16,7 +16,7 @@ CONFIG_SECURITY=y
 KEYBOARD=15in_102
 
 # Set keyboard LED mechanism
-KBLED=bonw14
+KBLED=bonw15
 
 # Set discrete GPU I2C bus
 CFLAGS+=-DI2C_DGPU=I2C_1
