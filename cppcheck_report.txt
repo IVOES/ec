@@ -1,0 +1,179 @@
+src/arch/avr/i2c.c:32:25: style:inconclusive: Boolean expression 'read' is used in bitwise operation. Did you mean '||'? [bitwiseOnBoolean]
+    TWDR = ((addr << 1) | read);
+                        ^
+src/board/arduino/mega2560/parallel.c:429:13: style: The scope of the variable 'res' can be reduced. [variableScope]
+    int16_t res;
+            ^
+src/board/arduino/uno/parallel.c:344:13: style: The scope of the variable 'res' can be reduced. [variableScope]
+    int16_t res;
+            ^
+src/board/system76/common/charger/bq24780s.c:108:9: style: Variable 'res' is reassigned a value before the old one has been used. [redundantAssignment]
+    res = smbus_write(CHARGER_ADDRESS, REG_CHARGE_CURRENT, 0);
+        ^
+src/board/system76/common/charger/bq24780s.c:101:9: note: res is assigned
+    res = smbus_write(
+        ^
+src/board/system76/common/charger/bq24780s.c:108:9: note: res is overwritten
+    res = smbus_write(CHARGER_ADDRESS, REG_CHARGE_CURRENT, 0);
+        ^
+src/board/system76/common/charger/bq24780s.c:164:9: style: Variable 'res' is reassigned a value before the old one has been used. [redundantAssignment]
+    res = smbus_write(
+        ^
+src/board/system76/common/charger/bq24780s.c:157:9: note: res is assigned
+    res = smbus_write(
+        ^
+src/board/system76/common/charger/bq24780s.c:164:9: note: res is overwritten
+    res = smbus_write(
+        ^
+src/board/system76/common/charger/bq24780s.c:164:9: style: Variable 'res' is assigned a value that is never used. [unreadVariable]
+    res = smbus_write(
+        ^
+src/board/system76/common/dgpu.c:40:0: information: Skipping configuration 'BOARD_DGPU_FAN_POINTS;HAVE_DGPU' since the value of 'BOARD_DGPU_FAN_POINTS' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly. [ConfigurationNotChecked]
+    BOARD_DGPU_FAN_POINTS
+^
+src/board/system76/common/kbc.c:470:21: style: Local variable 'sts' shadows outer variable [shadowVariable]
+            uint8_t sts = *(PS2_TOUCHPAD.status);
+                    ^
+src/board/system76/common/kbc.c:458:13: note: Shadowed declaration
+    uint8_t sts;
+            ^
+src/board/system76/common/kbc.c:470:21: note: Shadow variable
+            uint8_t sts = *(PS2_TOUCHPAD.status);
+                    ^
+src/board/system76/common/kbc.c:495:25: style: Local variable 'sts' shadows outer variable [shadowVariable]
+                uint8_t sts = *(PS2_TOUCHPAD.status);
+                        ^
+src/board/system76/common/kbc.c:458:13: note: Shadowed declaration
+    uint8_t sts;
+            ^
+src/board/system76/common/kbc.c:495:25: note: Shadow variable
+                uint8_t sts = *(PS2_TOUCHPAD.status);
+                        ^
+src/board/system76/common/kbled/bonw14.c:45:11: warning: Redundant assignment of 'level' to itself. [selfAssignment]
+    level = level;
+          ^
+src/board/system76/common/kbled/bonw14.c:55:11: warning: Redundant assignment of 'color' to itself. [selfAssignment]
+    color = color;
+          ^
+src/board/system76/common/kbled/bonw14.c:45:11: style: Variable 'level' is assigned a value that is never used. [unreadVariable]
+    level = level;
+          ^
+src/board/system76/common/kbled/bonw14.c:55:11: style: Variable 'color' is assigned a value that is never used. [unreadVariable]
+    color = color;
+          ^
+src/board/system76/common/kbled/none.c:21:11: warning: Redundant assignment of 'level' to itself. [selfAssignment]
+    level = level;
+          ^
+src/board/system76/common/kbled/none.c:31:11: warning: Redundant assignment of 'color' to itself. [selfAssignment]
+    color = color;
+          ^
+src/board/system76/common/kbled/none.c:21:11: style: Variable 'level' is assigned a value that is never used. [unreadVariable]
+    level = level;
+          ^
+src/board/system76/common/kbled/none.c:31:11: style: Variable 'color' is assigned a value that is never used. [unreadVariable]
+    color = color;
+          ^
+src/board/system76/common/kbled/white_dac.c:17:0: information: Skipping configuration 'KBLED_DAC' since the value of 'KBLED_DAC' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly. [ConfigurationNotChecked]
+    DACPDREG &= ~BIT(KBLED_DAC);
+^
+src/board/system76/common/kbled/white_dac.c:26:0: information: Skipping configuration 'KBLED_DAC' since the value of 'KBLED_DAC' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly. [ConfigurationNotChecked]
+    return KBLED_DACDAT;
+^
+src/board/system76/common/kbled/white_dac.c:34:0: information: Skipping configuration 'KBLED_DAC' since the value of 'KBLED_DAC' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly. [ConfigurationNotChecked]
+    KBLED_DACDAT = level;
+^
+src/board/system76/common/peci.c:304:12: warning: Redundant assignment of 'HOSTAR' to itself. [selfAssignment]
+    HOSTAR = HOSTAR;
+           ^
+src/board/system76/common/peci.c:326:16: warning: Redundant assignment of 'HOSTAR' to itself. [selfAssignment]
+        HOSTAR = HOSTAR;
+               ^
+src/board/system76/common/peci.c:335:16: warning: Redundant assignment of 'HOSTAR' to itself. [selfAssignment]
+        HOSTAR = HOSTAR;
+               ^
+src/board/system76/common/peci.c:346:12: warning: Redundant assignment of 'HOSTAR' to itself. [selfAssignment]
+    HOSTAR = HOSTAR;
+           ^
+src/board/system76/common/peci.c:382:16: warning: Redundant assignment of 'HOSTAR' to itself. [selfAssignment]
+        HOSTAR = HOSTAR;
+               ^
+src/board/system76/common/peci.c:389:12: warning: Redundant assignment of 'HOSTAR' to itself. [selfAssignment]
+    HOSTAR = HOSTAR;
+           ^
+src/board/system76/common/peci.c:43:0: information: Skipping configuration 'BOARD_FAN_POINTS' since the value of 'BOARD_FAN_POINTS' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly. [ConfigurationNotChecked]
+    BOARD_FAN_POINTS
+^
+src/board/system76/common/peci.c:97:14: warning: Redundant assignment of 'ESUCTRL0' to itself. [selfAssignment]
+    ESUCTRL0 = ESUCTRL0;
+             ^
+src/board/system76/common/peci.c:99:14: warning: Redundant assignment of 'ESOCTRL0' to itself. [selfAssignment]
+    ESOCTRL0 = ESOCTRL0;
+             ^
+src/board/system76/common/peci.c:177:14: warning: Redundant assignment of 'ESUCTRL0' to itself. [selfAssignment]
+    ESUCTRL0 = ESUCTRL0;
+             ^
+src/board/system76/common/peci.c:179:14: warning: Redundant assignment of 'ESOCTRL0' to itself. [selfAssignment]
+    ESOCTRL0 = ESOCTRL0;
+             ^
+src/board/system76/common/smfi.c:111:19: style: Variable 'flags' is assigned a value that is never used. [unreadVariable]
+    uint8_t flags = smfi_cmd[SMFI_CMD_DATA];
+                  ^
+src/board/system76/common/stdio.c:29:0: information: Skipping configuration 'I2C_DEBUGGER' since the value of 'I2C_DEBUGGER' is unknown. Use -D if you want to check it. You can use -U to skip it explicitly. [ConfigurationNotChecked]
+    i2c_send(&I2C_SMBUS, I2C_DEBUGGER, &byte, 1);
+^
+src/board/system76/lemp9/board.c:23:8: warning: Redundant assignment of 'ac' to itself. [selfAssignment]
+    ac = ac;
+       ^
+src/board/system76/lemp9/board.c:23:8: style: Variable 'ac' is assigned a value that is never used. [unreadVariable]
+    ac = ac;
+       ^
+src/ec/ite/i2c.c:83:38: style:inconclusive: Boolean expression 'read' is used in bitwise operation. Did you mean '||'? [bitwiseOnBoolean]
+        *(i2c->trasla) = (addr << 1) | read;
+                                     ^
+src/ec/ite/i2c.c:54:19: warning: Redundant assignment of '*i2c->hosta' to itself. [selfAssignment]
+    *(i2c->hosta) = *(i2c->hosta);
+                  ^
+src/ec/ite/i2c.c:93:19: warning: Redundant assignment of '*i2c->hosta' to itself. [selfAssignment]
+    *(i2c->hosta) = *(i2c->hosta);
+                  ^
+src/ec/ite/i2c.c:115:27: warning: Redundant assignment of '*i2c->hosta' to itself. [selfAssignment]
+            *(i2c->hosta) = *(i2c->hosta);
+                          ^
+src/ec/ite/ps2.c:22:20: warning: Redundant assignment of '*ps2->status' to itself. [selfAssignment]
+    *(ps2->status) = *(ps2->status);
+                   ^
+src/board/system76/lemp9/board.c:21:0: style: The function 'board_on_ac' is never used. [unusedFunction]
+
+^
+src/board/system76/common/flash/wrapper.c:36:0: style: The function 'flash_read_u32' is never used. [unusedFunction]
+
+^
+src/board/system76/common/flash/wrapper.c:52:0: style: The function 'flash_read_u8' is never used. [unusedFunction]
+
+^
+src/board/system76/common/flash/wrapper.c:64:0: style: The function 'flash_write_u32' is never used. [unusedFunction]
+
+^
+src/board/system76/common/flash/wrapper.c:72:0: style: The function 'flash_write_u8' is never used. [unusedFunction]
+
+^
+src/arch/avr/gpio.c:5:0: style: The function 'gpio_get_dir' is never used. [unusedFunction]
+
+^
+src/board/arduino/mega2560/i2c.c:8:0: style: The function 'i2c_init' is never used. [unusedFunction]
+
+^
+src/arch/avr/i2c_slave.c:18:0: style: The function 'i2c_slave_init' is never used. [unusedFunction]
+
+^
+src/board/system76/common/pnp.c:34:0: style: The function 'pnp_read' is never used. [unusedFunction]
+
+^
+src/board/system76/common/ps2.c:5:0: style: The function 'ps2_init' is never used. [unusedFunction]
+
+^
+src/board/system76/common/usbpd/tps65987.c:71:0: style: The function 'usbpd_dump' is never used. [unusedFunction]
+
+^
+nofile:0:0: information: Cppcheck cannot find all the include files (use --check-config for details) [missingIncludeSystem]
+
